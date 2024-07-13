@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:56:29 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/13 20:19:37 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/13 20:47:22 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*get_next_line(int fd)
 	static char		*acc;
 	ssize_t			bytes;
 
+	if (!acc)
+		return (ft_strdup(""));
 	if (ft_strchr(acc, '%'))
 		return (process);
 	bytes = load_acc(&acc, fd);
@@ -25,8 +27,11 @@ char	*get_next_line(int fd)
 		free(acc);
 		return (NULL);
 	}
-	if (bytes == 0);
+	if (bytes == 0)
+	{
+		free (NULL);
 		return (process(&acc));		
+	}
 	return (process(&acc));
 }
 
