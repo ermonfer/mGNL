@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:56:29 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/13 20:47:22 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/14 00:36:42 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*get_next_line(int fd)
 {
 	static char		*acc;
 	ssize_t			bytes;
+	char			*line;
 
 	if (!acc)
 		return (ft_strdup(""));
@@ -29,8 +30,14 @@ char	*get_next_line(int fd)
 	}
 	if (bytes == 0)
 	{
-		free (NULL);
-		return (process(&acc));		
+		if (acc)
+		{
+			line = ft_strdup(acc);
+			free(acc);
+			acc = NULL;
+			return (ft_strdup(acc));
+		}
+		return (NULL);
 	}
 	return (process(&acc));
 }
