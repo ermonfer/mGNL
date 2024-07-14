@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:57:11 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/14 00:07:14 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/14 19:09:19 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*ft_strchr(const char *s, int c)
 	const unsigned char		*us;
 	unsigned char			uc;
 
+	if (s == NULL)
+		return (NULL);
 	us = (const unsigned char *)s;
 	uc = (unsigned char)c;
 	while (*us != uc)
@@ -39,21 +41,25 @@ char	*ft_strchr(const char *s, int c)
 
 char	*ft_strdup(const char *s)
 {
-	size_t	len;
+	size_t	i;
 	char	*copy;
 
 	if (s == NULL)
 		return (NULL);
-	len = ft_strlen(s) + 1;
-	copy = malloc(len);
+	copy = malloc(ft_strlen(s) + 1);
 	if (copy == NULL)
 		return (NULL);
-	while (len--)
-		*copy++ = *s++;
+	i = 0;
+	while (s[i])
+	{
+		copy[i] = s[i];
+		i++;
+	}
+	copy[i] = '\0';
 	return (copy);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
 	char	*subs;
 	size_t	length;
@@ -63,7 +69,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	length = ft_strlen(s);
 	if (start >= length)
 		return (ft_strdup(""));
-	if (length < len + start)
+	if (length - start < len)
 		len = length - start;
 	subs = (char *)malloc(len + 1);
 	if (subs == NULL)
@@ -76,23 +82,23 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (subs);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*concat(const char *s1, const char *s2)
 {
 	char	*res;
 	size_t	lens1;
 	size_t	lens2;
 
-	if (s1 == NULL && s2 == NULL)
-		return (NULL);
+	if (s1 == NULL)
+		return (ft_strdup(s2));
 	lens1 = ft_strlen(s1);
 	lens2 = ft_strlen(s2);
 	res = malloc(lens1 + lens2 + 1);
 	if (res == NULL)
 		return (NULL);
 	while (lens1--)
-		*res++;
+		*res++ = *s1++;
 	while (lens2--)
-		*res++;
+		*res++ = *s2++;
 	*res = '\0';
 	return (res);
 }

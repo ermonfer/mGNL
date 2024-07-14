@@ -6,11 +6,16 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:56:29 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/14 00:36:42 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:40:42 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
+
+char			*get_line(char **acc);
+static ssize_t	load_acc(char **acc, int fd);
+char			*get_next_line(int fd);
 
 char	*get_next_line(int fd)
 {
@@ -18,10 +23,8 @@ char	*get_next_line(int fd)
 	ssize_t			bytes;
 	char			*line;
 
-	if (!acc)
-		return (ft_strdup(""));
-	if (ft_strchr(acc, '%'))
-		return (process);
+	if (ft_strchr(acc, '\n'))
+		return (get_line(&acc));
 	bytes = load_acc(&acc, fd);
 	if (bytes == -1)
 	{
@@ -35,48 +38,49 @@ char	*get_next_line(int fd)
 			line = ft_strdup(acc);
 			free(acc);
 			acc = NULL;
-			return (ft_strdup(acc));
+			return (line);
 		}
 		return (NULL);
 	}
-	return (process(&acc));
+	return (get_line(&acc));
 }
 
-char	*process(char **acc)
+char	*get_line(char **acc)
 {
 	char	*line;
-	char	*end_line;
+	char	*next_line;
 
-		end_line = ft_strchr(*acc, '\n') + 1;
-		line = ft_substr(*acc, 0, end_line - *acc);
-		end_line = ft_strdup(end_line);
+	next_line = ft_strchr(*acc, '\n') + 1;
+	if (next_line == NULL)
+	{
 		free(*acc);
-		*acc = end_line;
-		return (line);	
+		return (NULL);
+	}
+	line = ft_substr(*acc, 0, next_line - *acc);
+	next_line = ft_strdup(next_line);
+	free(*acc);
+	*acc = next_line;
+	return (line);
 }
 
-ssize_t	load_acc(char **acc, int fd)
+static ssize_t	load_acc(char **acc, int fd)
 {
-	ssize_t bytes;
+	ssize_t	bytes;
 	char	*tmp;
-	char	*buffer;
+	char	buffer[BUFFER_SIZE + 1];
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (-1);
-	bytes = 1;
-	while (bytes)
+	while (1)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
-		if (bytes == -1)
-			return (-1);
-		tmp = ft_strjoin(*acc, buffer);
+		if (bytes == -1 || bytes == 0)
+			return (bytes);
+		buffer[bytes] = 0;
+		tmp = concat(*acc, buffer);
 		if (!tmp)
 			return (-1);
 		free(*acc);
 		*acc = tmp;
 		if (ft_strchr(buffer, '\n'))
-			return (bytes);	
+			return (bytes);
 	}
-	return (bytes);
 }

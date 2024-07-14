@@ -49,10 +49,8 @@ static char *get_line(const char *str)
 
     pos = 0;
     while (str[pos] && str[pos] != '\n')
-    {
-        line = malloc(pos+2);
-        pos++;
-    }
+    	pos++;
+    line = malloc(pos+2);
     i = 0;
     while(i <= pos)
     {
@@ -186,7 +184,7 @@ char *get_next_line(int fd) {
 
         if (has_line_end(acc)) {
             char *line = get_line(acc);
-            tmp = get_rest(acc);
+            char *tmp = get_rest(acc);
             free(acc);
             acc = tmp;
             return line;
