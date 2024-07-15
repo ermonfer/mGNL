@@ -6,16 +6,15 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:56:29 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/14 18:40:42 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/15 12:49:11 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-char			*get_line(char **acc);
+static char		*get_line(char **acc);
 static ssize_t	load_acc(char **acc, int fd);
-char			*get_next_line(int fd);
 
 char	*get_next_line(int fd)
 {
@@ -45,7 +44,7 @@ char	*get_next_line(int fd)
 	return (get_line(&acc));
 }
 
-char	*get_line(char **acc)
+static char	*get_line(char **acc)
 {
 	char	*line;
 	char	*next_line;
@@ -75,7 +74,7 @@ static ssize_t	load_acc(char **acc, int fd)
 		if (bytes == -1 || bytes == 0)
 			return (bytes);
 		buffer[bytes] = 0;
-		tmp = concat(*acc, buffer);
+		tmp = gnl_concat(*acc, buffer);
 		if (!tmp)
 			return (-1);
 		free(*acc);

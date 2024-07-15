@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:57:11 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/14 19:09:19 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/15 11:55:16 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,23 +82,21 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	return (subs);
 }
 
-char	*concat(const char *s1, const char *s2)
+char	*gnl_concat(const char *s1, const char *s2)
 {
 	char	*res;
-	size_t	lens1;
-	size_t	lens2;
+	size_t	i;
 
 	if (s1 == NULL)
 		return (ft_strdup(s2));
-	lens1 = ft_strlen(s1);
-	lens2 = ft_strlen(s2);
-	res = malloc(lens1 + lens2 + 1);
+	res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (res == NULL)
 		return (NULL);
-	while (lens1--)
-		*res++ = *s1++;
-	while (lens2--)
-		*res++ = *s2++;
-	*res = '\0';
+	i = 0;
+	while (*s1)
+		res[i++] = *s1++;
+	while (*s2)
+		res[i++] = *s2++;
+	res[i] = '\0';
 	return (res);
 }

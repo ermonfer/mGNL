@@ -20,12 +20,11 @@ int main() {
     while(1) {
         line = get_next_line(fd);
         if (!line) {
-            printf("End!\n");
             return 0;
         }
         printf("%s", line);
         free(line);
     }
-
+    close(fd)
     return 0;
 }
