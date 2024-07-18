@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:56:29 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/15 20:49:40 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:52:32 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,34 @@
 static char		*get_line(char **acc);
 static ssize_t	load_acc(char **acc, int fd);
 static t_fd_acc *get_fd_acc(t_fd_acc **head, int fd);
+static void free_fd_acc(t_fd_acc **head, int fd);
 
+/**
+ * Reads the next line from the given file descriptor.
+ * Manages multiple file descriptors using a linked list of accumulators.
+ */ 
 char	*get_next_line(int fd)
 {
-	static char		*acc;
+	static t_fd_acc	*head;
+	t_fd_acc		*current_fd;
 	ssize_t			bytes;
 	char			*line;
 
-	if (ft_strchr(acc, '\n'))
-		return (get_line(&acc));
-	bytes = load_acc(&acc, fd);
+	current_fd = get_fd_acc(&head, fd);
+	if (ft_strchr(current_fd->acc, '\n'))
+		return (get_line(&current_fd->acc));
+	bytes = load_acc(&current_fd->acc, fd);
 	if (bytes == -1)
 	{
-		free(acc);
+		free_fd_acc(fd);
 		return (NULL);
 	}
 	if (bytes == 0)
 	{
-		if (acc)
+		if (current_fd->acc)
 		{
-			line = ft_strdup(acc);
-			free(acc);
+			line = ft_strdup(current_fd->acc);
+			free_fd_acc(fd);
 			acc = NULL;
 			return (line);
 		}
@@ -85,19 +92,21 @@ static ssize_t	load_acc(char **acc, int fd)
 	}
 }
 
-// Es un puntero doble, porque quieres modificar la lista que esta dada en la
-// funcion externa. Recoorre la lista buscando coincidencia, si no lo hay pone uno delante.
+/**
+ * Retrieves the accumulator node for a given file descriptor.
+ * If the node does not exist, it creates a new one and adds it to the list.
+ */ 
 static t_fd_acc *get_fd_acc(t_fd_acc **head, int fd)
 {
-    t_fd_acc *current = *head;
+    t_fd_acc *current;
 
+	current = *head;
     while (current)
     {
         if (current->fd == fd)
             return current;
         current = current->next;
     }
-
     current = malloc(sizeof(t_fd_acc));
     if (current == NULL)
         return NULL;
@@ -108,11 +117,16 @@ static t_fd_acc *get_fd_acc(t_fd_acc **head, int fd)
     return current;
 }
 
-static void free_fd_acc(t_fd_acc **head, int fd)
+/**
+ * Frees the accumulator node for a given file descriptor.
+ */
+ static void free_fd_acc(t_fd_acc **head, int fd)
 {
-    t_fd_acc *current = *head;
-    t_fd_acc *prev = NULL;
+    t_fd_acc *current;
+    t_fd_acc *prev;
 
+	current = *head;
+	prev = NULL;
     while (current)
     {
         if (current->fd == fd)
@@ -123,7 +137,7 @@ static void free_fd_acc(t_fd_acc **head, int fd)
                 *head = current->next;
             free(current->acc);
             free(current);
-            return;
+            return ;
         }
         prev = current;
         current = current->next;
