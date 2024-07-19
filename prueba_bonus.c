@@ -20,7 +20,6 @@ int main(void)
     int fd2 = open("texto2.txt", O_RDONLY);
     char *line = get_next_line(fd);
     char *line2 = get_next_line(fd2);
-    char *line3;
     while (line || line2)
     {
         if (line)
@@ -35,8 +34,5 @@ int main(void)
             free(line2);
             line2 = get_next_line(fd2);
         }
-        line3 = get_next_line(0);
-        printf("%s", line3);
-        free(line3);
     }
 }

@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:53:19 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/19 15:42:11 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:49:58 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*get_next_line(int fd)
 	char			*line;
 
 	if (ft_strchr(acc[fd], '\n'))
-	return (get_line(&acc[fd]));
+		return (get_line(&acc[fd]));
 	bytes = load_acc(&acc[fd], fd);
 	if (bytes == -1)
 	{
