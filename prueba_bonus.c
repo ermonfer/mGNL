@@ -16,9 +16,17 @@
 //! WARNING Main para probar 
 int main() {
     int fd = open("texto.txt", O_RDONLY);
+    int fd2 = open("texto2.txt", O_RDONLY);
     char *line;
     while(1) {
+
         line = get_next_line(fd);
+        if (!line) {
+            return 0;
+        }
+        printf("%s", line);
+        free(line);
+        line = get_next_line(fd2);
         if (!line) {
             return 0;
         }
