@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:53:54 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/19 15:05:13 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:38:46 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
+# ifndef MAXFD
+#  define MAXFD 1048576
+# endif
+
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <stddef.h>
-# include <limits.h>
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);

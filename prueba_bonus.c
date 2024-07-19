@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdio.h>
 
 //int main(void)
@@ -14,25 +14,29 @@
 
 
 //! WARNING Main para probar 
-int main() {
+int main(void)
+{
     int fd = open("texto.txt", O_RDONLY);
     int fd2 = open("texto2.txt", O_RDONLY);
-    char *line;
-    while(1) {
-
-        line = get_next_line(fd);
-        if (!line) {
-            return 0;
+    char *line = get_next_line(fd);
+    char *line2 = get_next_line(fd2);
+    char *line3;
+    while (line || line2)
+    {
+        if (line)
+        {
+            printf("%s", line);
+            free(line);
+            line = get_next_line(fd);
         }
-        printf("%s", line);
-        free(line);
-        line = get_next_line(fd2);
-        if (!line) {
-            return 0;
+        if (line2)
+        {
+            printf("%s", line2);
+            free(line2);
+            line2 = get_next_line(fd2);
         }
-        printf("%s", line);
-        free(line);
+        line3 = get_next_line(0);
+        printf("%s", line3);
+        free(line3);
     }
-    close(fd);
-    return 0;
 }

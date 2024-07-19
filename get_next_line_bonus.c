@@ -6,19 +6,18 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:53:19 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/19 15:11:00 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:42:11 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <stdio.h>
 
 static char		*get_line(char **acc);
 static ssize_t	load_acc(char **acc, int fd);
 
 char	*get_next_line(int fd)
 {
-	static char		*acc[OPEN_MAX];
+	static char		*acc[MAXFD];
 	ssize_t			bytes;
 	char			*line;
 

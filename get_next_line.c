@@ -6,12 +6,11 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:56:29 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/15 12:49:11 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:42:40 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 static char		*get_line(char **acc);
 static ssize_t	load_acc(char **acc, int fd);
