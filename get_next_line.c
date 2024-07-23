@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:45:28 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/23 11:58:40 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:01:25 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char	*get_next_line(int fd)
 	if (bytes == -1)
 	{
 		free(acc);
+		acc = NULL;
 		return (NULL);
 	}
 	if (bytes == 0)
@@ -41,14 +42,15 @@ static char	*get_line(char **acc)
 	char	*next_line;
 
 	next_line = ft_strchr(*acc, '\n') + 1;
-	if (next_line == NULL)
-	{
-		free(*acc);
-		return (NULL);
-	}
 	line = ft_substr(*acc, 0, next_line - *acc);
 	next_line = ft_strdup(next_line);
 	free(*acc);
+	if (line == NULL || next_line == NULL)
+	{
+		free(line);
+		free(next_line);
+		return (NULL);
+	}
 	*acc = next_line;
 	return (line);
 }
@@ -63,11 +65,11 @@ static ssize_t	load_acc(char **acc, int fd)
 	{
 		buffer = malloc(BUFFER_SIZE + 1);
 		if (buffer == NULL)
-			return (free_return(buffer, -1));
+			return (-1);
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes == -1 || bytes == 0)
 			return (free_return(buffer, bytes));
-		buffer[bytes] = 0;
+		buffer[bytes] = '\0';
 		tmp = gnl_concat(*acc, buffer);
 		if (!tmp)
 			return (free_return(buffer, -1));
@@ -75,6 +77,7 @@ static ssize_t	load_acc(char **acc, int fd)
 		*acc = tmp;
 		if (ft_strchr(buffer, '\n'))
 			return (free_return(buffer, bytes));
+		free(buffer);
 	}
 }
 
