@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:53:54 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/19 16:47:59 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:02:13 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #  define MAXFD 1048576
 # endif
 
+// # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>

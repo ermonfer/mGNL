@@ -35,4 +35,5 @@ int main(void)
             line2 = get_next_line(fd2);
         }
     }
+    return 0;
 }

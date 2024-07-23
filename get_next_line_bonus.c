@@ -6,7 +6,7 @@
 /*   By: fmontero <fmontero@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:53:19 by fmontero          #+#    #+#             */
-/*   Updated: 2024/07/19 16:49:58 by fmontero         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:04:38 by fmontero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 static char		*get_line(char **acc);
 static ssize_t	load_acc(char **acc, int fd);
+static char		*last_line(char **acc);
+static ssize_t	free_return(char *buffer, ssize_t bytes);
 
 char	*get_next_line(int fd)
 {
 	static char		*acc[MAXFD];
 	ssize_t			bytes;
-	char			*line;
 
 	if (ft_strchr(acc[fd], '\n'))
 		return (get_line(&acc[fd]));
@@ -30,17 +31,33 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	if (bytes == 0)
-	{
-		if (acc[fd])
-		{
-			line = ft_strdup(acc[fd]);
-			free(acc[fd]);
-			acc[fd] = NULL;
-			return (line);
-		}
-		return (NULL);
-	}
+		return(last_line(&acc[fd]));
 	return (get_line(&acc[fd]));
+}
+
+static ssize_t	load_acc(char **acc, int fd)
+{
+	ssize_t	bytes;
+	char	*tmp;
+	char	*buffer;
+
+	while (1)
+	{
+		buffer = malloc(BUFFER_SIZE + 1);
+		if (buffer == NULL)
+			return (free_return(buffer, -1));
+		bytes = read(fd, buffer, BUFFER_SIZE);
+		if (bytes == -1 || bytes == 0)
+			return (free_return(buffer, bytes));
+		buffer[bytes] = 0;
+		tmp = gnl_concat(*acc, buffer);
+		if (!tmp)
+			return (free_return(buffer, -1));
+		free(*acc);
+		*acc = tmp;
+		if (ft_strchr(buffer, '\n'))
+			return (free_return(buffer, bytes));
+	}
 }
 
 static char	*get_line(char **acc)
@@ -61,24 +78,22 @@ static char	*get_line(char **acc)
 	return (line);
 }
 
-static ssize_t	load_acc(char **acc, int fd)
+static char	*last_line(char **acc)
 {
-	ssize_t	bytes;
-	char	*tmp;
-	char	buffer[BUFFER_SIZE + 1];
+	char	*line;
 
-	while (1)
+	if (*acc)
 	{
-		bytes = read(fd, buffer, BUFFER_SIZE);
-		if (bytes == -1 || bytes == 0)
-			return (bytes);
-		buffer[bytes] = 0;
-		tmp = gnl_concat(*acc, buffer);
-		if (!tmp)
-			return (-1);
+		line = ft_strdup(*acc);
 		free(*acc);
-		*acc = tmp;
-		if (ft_strchr(buffer, '\n'))
-			return (bytes);
+		*acc = NULL;
+		return (line);
 	}
+	return (NULL);
+}
+
+static ssize_t	free_return(char *buffer, ssize_t bytes)
+{
+	free(buffer);
+	return (bytes);
 }
